@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ürünler</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1>Ürünler</h1>
+
+    <!-- Ürün Ekleme Formu -->
+    <form action="/products" method="POST" class="mb-3">
+      <div class="mb-3">
+        <label for="name" class="form-label">Ürün Adı</label>
+        <input type="text" name="name" id="name" placeholder="Ürün Adı" required class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Fiyat</label>
+        <input type="number" name="price" id="price" placeholder="Fiyat" required class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="categoryId" class="form-label">Kategori</label>
+        <select name="categoryId" id="categoryId" class="form-select" required>
+          <% categories.forEach(category=> { %>
+            <option value="<%= category.id %>">
+              <%= category.name %>
+            </option>
+            <% }) %>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Ekle</button>
+    </form>
+
+    <!-- Ürün Listesi -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ürün Adı</th>
+          <th>Fiyat</th>
+          <th>Kategori</th>
+          <th>İşlemler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(product=> { %>
+          <tr>
+            <td>
+              <%= product.id %>
+            </td>
+            <td>
+              <%= product.name %>
+            </td>
+            <td>
+              <%= product.price %>
+            </td>
+            <td>
+              <%= product.Category ? product.Category.name : 'Kategori Yok' %>
+            </td>
+            <td>
+              <!-- Güncelleme Formu -->
+              <!-- Ürün Güncelleme Formu -->
+              <form action="/products/<%= product.id %>?_method=PUT" method="POST" style="display: inline;">
+                <input type="text" name="name" value="<%= product.name %>" required
+                  class="form-control d-inline w-auto">
+                <input type="number" name="price" value="<%= product.price %>" required
+                  class="form-control d-inline w-auto">
+                <button type="submit" class="btn btn-warning btn-sm">Güncelle</button>
+              </form>
+
+
+              <!-- Silme Formu -->
+              <form action="/products/<%= product.id %>?_method=DELETE" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
